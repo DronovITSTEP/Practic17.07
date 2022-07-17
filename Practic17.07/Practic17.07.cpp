@@ -225,7 +225,8 @@ void main() {
 возможного размера, в котором нужно собрать 
 общие элементы двух массивов без повторений.
 */
-void fillArr(int* a, int s) {//заполнение массива и вывод на экран	
+//заполнение массива и вывод на экран
+void fillArr(int* a, int s) {	
 	for (int i = 0; i < s; i++) {
 		*(a + i) = rand() % 10;
 		cout << *(a + i) << " ";
@@ -233,6 +234,8 @@ void fillArr(int* a, int s) {//заполнение массива и вывод
 	cout << endl;
 	Sleep(300);
 }
+
+//объединение двух массивов А и В в один массив С
 void allArr(int* A, int* C, int* B, int M, int N) {
 	for (int i = 0; i < M + N; i++) {
 		if (i < M)
@@ -244,17 +247,8 @@ void allArr(int* A, int* C, int* B, int M, int N) {
 	}
 }
 
-void main() {
-	srand(time(NULL));
-	int M, N;
-	cout << "Enter size array: \n";
-	cin >> M >> N;
-	int* A = new int[M];
-	fillArr(A, M);
-	int* B = new int[N];
-	fillArr(B, N);
-	int* C = new int[M + N];
-	allArr(A, C, B, M, N);
+//подсчет кол-ва элемнтов без повторений
+int countArrayElem(int* C, int M, int N) {
 	int counter = 1;
 	bool flag;
 	for (int i = 0; i < M + N - 1; i++) {
@@ -270,10 +264,27 @@ void main() {
 		}
 	}
 	cout << endl << counter << endl;
-	int *C1 = new int[counter];
-	for (int i = 0, k = 0 ; i < M + N - 1; i++) {
+	return counter;
+}
+
+void main() {
+	srand(time(NULL));
+	int M, N;
+	cout << "Enter size array: \n";
+	cin >> M >> N;
+	int* A = new int[M];
+	fillArr(A, M);
+	int* B = new int[N];
+	fillArr(B, N);
+	int* C = new int[M + N];
+	allArr(A, C, B, M, N);
+
+	int *C1 = new int[countArrayElem(C, M, N)]; //создание массива (в размер передает результат функции)
+	bool flag;
+	//заносим значения из массива С в массив С1 без повторений
+	for (int i = 0, k = 0 ; i < M + N; i++) {
 		flag = true;
-		for (int j = i + 1; j < M + N; j++) {
+		for (int j = i-1; j >=0; j--) {
 			if (C[i] == C[j]) {
 				flag = false;
 				break;
@@ -284,7 +295,8 @@ void main() {
 			k++;
 		}
 	}
-	for (int i = 0; i < counter; i++) {
+	//вывод результата на экран
+	for (int i = 0; i < countArrayElem(C, M, N); i++) {
 		cout << C1[i] << " ";
 	}
 
